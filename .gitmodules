@@ -1,0 +1,3 @@
+[submodule "cargotracker"]
+	path = cargotracker
+	url = https://github.com/javaee/cargotracker.git
