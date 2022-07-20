@@ -13,14 +13,14 @@
                     <div class="ui-grid-col-8" id="mainCol">
                         <br/>
                         <h:form id="trackingForm">
-                            <p:outputLabel id="ouputLabel" value="#{track.title} #{track.trackingId}" />
+                            <p:outputLabel id="ouputLabel" value="#{tracker.title} #{tracker.trackingId}" />
                             <p:autoComplete 
                                 id="trackingId" 
                                 dropdown="true" 
                                 required="true" 
                                 forceSelection="true" 
-                                value="#{track.trackingId}"
-                                completeMethod="#{track.completeText}" 
+                                value="#{tracker.trackingId}"
+                                completeMethod="#{tracker.completeText}" 
                             >
                                 <p:ajax event="itemSelect" update="ouputLabel" process="@this"/>
                                 <p:ajax event="change" update="ouputLabel" process="@this"/>
