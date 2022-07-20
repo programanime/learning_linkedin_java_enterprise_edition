@@ -4,7 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="/WEB-INF/templates/public.xhtml">
-        <ui:define name="title">Track Cargo</ui:define>
+        <ui:define name="title">Track Cargo public </ui:define>
         <ui:define name="content">
             <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
             <div class="ui-grid ui-grid-responsive">
@@ -13,8 +13,18 @@
                     <div class="ui-grid-col-8" id="mainCol">
                         <br/>
                         <h:form id="trackingForm">
-                            <p:outputLabel value="#{track.title}" />
-                            <p:autoComplete id="trackingId" dropdown="true" required="true" forceSelection="true" completeMethod="#{track.completeText}" />
+                            <p:outputLabel id="ouputLabel" value="#{track.title} #{track.trackingId}" />
+                            <p:autoComplete 
+                                id="trackingId" 
+                                dropdown="true" 
+                                required="true" 
+                                forceSelection="true" 
+                                value="#{track.trackingId}"
+                                completeMethod="#{track.completeText}" 
+                            >
+                                <p:ajax event="itemSelect" update="ouputLabel" process="@this"/>
+                                <p:ajax event="change" update="ouputLabel" process="@this"/>
+                            </p:autoComplete>
                         </h:form>
                         <br/>
                     </div>

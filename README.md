@@ -3,10 +3,10 @@ robust enough, from small business website to fortune 500 backend systems.
 ![](img/jee_ecosystem.png)  
 ![](img/jee_structure.png)  
   
+# Learning Java Enterprise Edition
 
 # Linkedin course
-[text](https://www.linkedin.com/learning/learning-java-enterprise-edition/)
-
+[course link](https://www.linkedin.com/learning/learning-java-enterprise-edition/)
 ## books
 - java ee patterns design
 
@@ -192,4 +192,247 @@ the complete method should contain the whole method name and should receive one 
         list.add("word7");
         return list;
     }
+```
+
+```html
+<h:form id="trackingForm">
+    <p:outputLabel id="ouputLabel" value="#{track.title} #{track.trackingId}" />
+    <p:autoComplete 
+        id="trackingId" 
+        dropdown="true" 
+        required="true" 
+        forceSelection="true" 
+        value="#{track.trackingId}"
+        completeMethod="#{track.completeText}" 
+    >
+        <p:ajax event="itemSelect" update="ouputLabel" process="@this"/>
+        <p:ajax event="change" update="ouputLabel" process="@this"/>
+    </p:autoComplete>
+</h:form>
+```
+### conclusions
+each time some event is trigger, one ajax request is send to server, a header with the event name is sent
+
+![](img/ajax_event.png)  
+
+# JPA
+# Embeddable
+
+```java
+@Embeddable
+```
+- the entity is not a table
+- the entity becomes part of other entities
+
+# ManyToOne
+- the one part is the current attribute
+```java
+@ManyToOne
+@JoinColumn(name = "spec_origin_id", updatable = false)
+private Location origin;
+```
+
+# Temporal annotation
+jpa could handle three types, Date, Time, Timestamp
+```java
+@Temporal(TemporalType.DATE)
+```
+# Column annotation
+is a important one:
+1. nullable
+2. updatable
+2. insertable
+4. name
+5. unique
+```java
+    @Column(name = "spec_arrival_deadline")
+```
+
+# notnull annotation
+indicator, the column is not null
+```java
+@NotNull
+```
+
+# JoinColumn
+- in is basic shape, useful for foreign keys
+- you could specific updatable, insertable, nullable, unique
+```java
+    @JoinColumn(name = "spec_destination_id")
+```
+
+# id annotation
+```java
+@Id
+@GeneratedValue
+private Long id;
+```
+# entity annotation
+let you declare an object to be manage by the entity manager
+
+```java
+@Entity
+```
+
+# NamedQueries annotation
+- let you define queries in jpa language
+```java
+@NamedQueries({
+    @NamedQuery(name = "Cargo.findAll",
+            query = "Select c from Cargo c"),
+    @NamedQuery(name = "Cargo.findByTrackingId",query = "Select c from Cargo c where c.trackingId = :trackingId"),
+    @NamedQuery(name = "Cargo.getAllTrackingIds",
+            query = "Select c.trackingId from Cargo c") })
+```
+
+```java
+    @Embedded
+    private TrackingId trackingId;
+```
+
+# apache commons lang
+useful for check null values, make builders, composite equals, and so on.
+
+```java
+        Validate.notNull(trackingId, "Tracking ID is required");
+```
+
+# enumerated annotation
+let you declare a columns which could contain specific values
+```java
+    @Enumerated(EnumType.STRING)
+    @Column(name = "next_expected_handling_event_type")
+    private HandlingEvent.Type type;
+```
+
+EqualsBuilder
+```java
+private boolean sameValueAs(HandlingActivity other) {
+    return other != null
+            && new EqualsBuilder().append(this.type, other.type)
+            .append(this.location, other.location)
+            .append(this.voyage, other.voyage).isEquals();
+}
+```
+
+# OneToMany annotation
+- you need to indicate the foreign key in the other table, to join with the current entity
+- you could indicate an order by
+```java
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cargo_id")
+    @OrderBy("loadTime")
+    @PrivateOwned
+    @Size(min = 1)
+    private List<Leg> legs = Collections.emptyList();
+```
+
+# PrivateOwned annotation
+- the target object just exists inside the current one
+- can't belong to other or exists by their own
+```java
+    @PrivateOwned
+```
+
+# Size annotation
+indicate the size for the field
+```java
+    @Size(min = 1)
+```
+
+# Transient annotation
+don't be persisted in the database
+```java
+    @Transient
+    private String summary;
+```
+
+# Enumerated annotation
+useful when you need to keep specific values for a column
+```java
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Type type;
+
+    public enum Type {
+        LOAD(true),
+        UNLOAD(true),
+        RECEIVE(false),
+        CLAIM(false),
+        CUSTOMS(false);
+        private final boolean voyageRequired;
+
+        private Type(boolean voyageRequired) {
+            this.voyageRequired = voyageRequired;
+        }
+
+        public boolean requiresVoyage() {
+            return voyageRequired;
+        }
+
+        public boolean prohibitsVoyage() {
+            return !requiresVoyage();
+        }
+
+        public boolean sameValueAs(Type other) {
+            return other != null && this.equals(other);
+        }
+    }
+```
+
+# Pattern annotation
+to check the string pattern
+```java
+    @Pattern(regexp = "[a-zA-Z]{2}[a-zA-Z2-9]{3}")
+    private String unlocode;
+```
+
+
+# CDI
+about injecting dependencies
+
+# ApplicationScoped annotation
+- the bean is created once and is shared by all the requests, EJBs, Servlets, JMS objects, Filters.
+
+```java
+@ApplicationScoped
+```
+
+# PersistenceContext annotation
+let you handle entities
+```java
+@PersistenceContext
+private EntityManager entityManager;
+```
+
+getting one single result
+```java
+return entityManager.createNamedQuery("Location.findByUnLocode",
+        Location.class).setParameter("unLocode", unLocode)
+        .getSingleResult();
+```
+
+getting result list
+```java
+        return entityManager.createNamedQuery("Location.findAll", Location.class)
+                .getResultList();
+```
+
+# Inject annotation
+let you inject a bean
+```java
+@Inject
+private CargoRepository cargoRepository;
+```
+
+# Named annotation
+let you create a bean with a named to be call by jsf or jsp
+
+# ViewScoped annotation
+the bean just live while the user interact with the same screen
+
+```java
+@Named
+@ViewScoped
+public class Track implements Serializable {
 ```

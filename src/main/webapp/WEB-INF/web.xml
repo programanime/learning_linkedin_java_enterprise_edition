@@ -27,13 +27,10 @@
         <welcome-file>index.xhtml</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
     <data-source>
         <name>java:app/jdbc/CargoTrackerDatabase</name>
         <class-name>org.apache.derby.jdbc.EmbeddedDriver</class-name>
-        <url>jdbc:derby:${webapp.databaseTempDir}/cargo-tracker-database;create=true</url>
-        <property>
-            <name>weblogic.GlobalTransactionsProtocol</name>
-            <value>EmulateTwoPhaseCommit</value>
-        </property>
+        <url>jdbc:derby:B:/databases/cargo.db;create=true</url>
     </data-source>
 </web-app>

@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.j2eeVersion>1.7</netbeans.hint.j2eeVersion>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-        <webapp.databaseTempDir>/tmp</webapp.databaseTempDir>
+        <webapp.databaseTempDir>b:/databases</webapp.databaseTempDir>
         <webapp.graphTraversalUrl>http://localhost:8080/learning-cargo-tracker/rest/graph-traversal/shortest-path</webapp.graphTraversalUrl>
     </properties>
 

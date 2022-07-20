@@ -32,7 +32,16 @@ import javax.inject.Named;
 public class Track implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private String trackingId;
     
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    public void setTrackingId(String trackingId) {
+        this.trackingId = trackingId;
+    }
+
     public String getTitle(){
         return "this is my title";
     }
