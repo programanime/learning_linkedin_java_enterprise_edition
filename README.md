@@ -4,7 +4,9 @@ robust enough, from small business website to fortune 500 backend systems.
 ![](img/jee_structure.png)  
   
 
-# Alex Theedom
+# Linkedin course
+[text](https://www.linkedin.com/learning/learning-java-enterprise-edition/)
+
 ## books
 - java ee patterns design
 
