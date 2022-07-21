@@ -51,7 +51,8 @@ public class Leg implements Serializable {
 
     public Leg(Voyage voyage, Location loadLocation, Location unloadLocation,
             Date loadTime, Date unloadTime) {
-        Validate.noNullElements(new Object[]{voyage, loadLocation,unloadLocation, loadTime, unloadTime});
+        Validate.noNullElements(new Object[]{voyage, loadLocation,
+            unloadLocation, loadTime, unloadTime});
 
         this.voyage = voyage;
         this.loadLocation = loadLocation;

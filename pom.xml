@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.java</groupId>
-    <artifactId>learning-cargo-tracker</artifactId>
+    <artifactId>cargo-tracker</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>learning-cargo-tracker</name>
+    <name>cargo-tracker</name>
     <url>https://github.com/javaee/cargotracker/</url>
 
     <properties>
@@ -16,8 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.j2eeVersion>1.7</netbeans.hint.j2eeVersion>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-        <webapp.databaseTempDir>b:/databases</webapp.databaseTempDir>
-        <webapp.graphTraversalUrl>http://localhost:8080/learning-cargo-tracker/rest/graph-traversal/shortest-path</webapp.graphTraversalUrl>
+        <webapp.databaseTempDir>/tmp</webapp.databaseTempDir>
+        <webapp.graphTraversalUrl>http://localhost:8080/cargo-tracker/rest/graph-traversal/shortest-path</webapp.graphTraversalUrl>
     </properties>
 
     <!-- We need to use the PrimeFaces repository -->
@@ -105,7 +105,7 @@
     </dependencies>
 
     <build>
-        <finalName>learning-cargo-tracker</finalName>
+        <finalName>cargo-tracker</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -142,4 +142,90 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- GlassFish specific version of build -->
+        <profile>
+            <id>glassfish</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-glassfish-remote-3.1</artifactId>
+                    <version>1.0.0.CR4</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.4.14</version>
+                        <configuration>
+                            <container>
+                                <containerId>glassfish4x</containerId>
+                                <zipUrlInstaller>
+                                    <url>http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip</url>
+                                </zipUrlInstaller>
+                            </container>
+                            <properties>
+                                <context>cargo-tracker</context>
+                            </properties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- WebLogic Profile -->
+        <profile>
+            <id>weblogic</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <webapp.graphTraversalUrl>http://localhost:7001/cargo-tracker/rest/graph-traversal/shortest-path</webapp.graphTraversalUrl>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-wls-remote-12.1.2</artifactId>
+                    <version>1.0.0.Alpha3</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                            <webXml>${basedir}/src/weblogic/webapp/WEB-INF/web.xml</webXml>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18.1</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                            <systemPropertyVariables>
+                                <!-- This is needed to tell the unit tests which profile
+                                we are running. -->
+                                <profileId>${project.activeProfiles[0].id}</profileId>
+                                <!-- This is needed to tell Arquillian which profile
+                                we are running. -->
+                                <arquillian.launch>${project.activeProfiles[0].id}</arquillian.launch>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

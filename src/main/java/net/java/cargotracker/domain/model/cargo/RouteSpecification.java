@@ -24,15 +24,12 @@ public class RouteSpecification extends AbstractSpecification<Itinerary>
         implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     @ManyToOne
     @JoinColumn(name = "spec_origin_id", updatable = false)
     private Location origin;
-
     @ManyToOne
     @JoinColumn(name = "spec_destination_id")
     private Location destination;
-    
     @Temporal(TemporalType.DATE)
     @Column(name = "spec_arrival_deadline")
     @NotNull
@@ -51,7 +48,8 @@ public class RouteSpecification extends AbstractSpecification<Itinerary>
         Validate.notNull(origin, "Origin is required");
         Validate.notNull(destination, "Destination is required");
         Validate.notNull(arrivalDeadline, "Arrival deadline is required");
-        Validate.isTrue(!origin.sameIdentityAs(destination),"Origin and destination can't be the same: " + origin);
+        Validate.isTrue(!origin.sameIdentityAs(destination),
+                "Origin and destination can't be the same: " + origin);
 
         this.origin = origin;
         this.destination = destination;

@@ -27,11 +27,9 @@ public class HandlingActivity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "next_expected_handling_event_type")
     private HandlingEvent.Type type;
-
     @ManyToOne
     @JoinColumn(name = "next_expected_location_id")
     private Location location;
-    
     @ManyToOne
     @JoinColumn(name = "next_expected_voyage_id")
     private Voyage voyage;

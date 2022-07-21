@@ -26,9 +26,9 @@ public class Itinerary implements Serializable {
     // Null object pattern.
     public static final Itinerary EMPTY_ITINERARY = new Itinerary();
     // TODO Look into why cascade delete doesn't work.
-    // TODO Index this is in leg_index
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cargo_id")
+    // TODO Index this is in leg_index
     @OrderBy("loadTime")
     @PrivateOwned
     @Size(min = 1)
