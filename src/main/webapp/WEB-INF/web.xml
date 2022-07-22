@@ -78,4 +78,10 @@
         <resource-adapter>jmsra</resource-adapter>
         <destination-name>HandlingEventRegistrationAttemptQueue</destination-name>
     </jms-destination>
+    <jms-destination>
+        <name>java:app/jms/SampleQueue</name>
+        <interface-name>javax.jms.Queue</interface-name>
+        <resource-adapter>jmsra</resource-adapter>
+        <destination-name>SampleQueue</destination-name>
+    </jms-destination>
 </web-app>
